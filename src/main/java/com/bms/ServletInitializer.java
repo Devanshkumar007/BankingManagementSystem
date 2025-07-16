@@ -1,4 +1,4 @@
-package com.dm;
+package com.bms;
 
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
