@@ -17,10 +17,10 @@ import jakarta.persistence.SequenceGenerator;
 @Entity
 public class Transaction {
 	
-	@SequenceGenerator(name ="transaction", initialValue = 100001, allocationSize=1)
+	@SequenceGenerator(name ="transgen", initialValue = 100001, allocationSize=1)
 	
 	@Id 
-	@GeneratedValue(generator="transaction", strategy = GenerationType.SEQUENCE) 
+	@GeneratedValue(generator="transgen", strategy = GenerationType.SEQUENCE) 
 	private int transactionId ; 
 	private Date date; 
 	private String type;

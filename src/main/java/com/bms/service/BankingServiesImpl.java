@@ -2,7 +2,7 @@ package com.bms.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
+import com.bms.controller.TransactionController;
 import com.bms.dao.AccountRepository;
 import com.bms.dao.TransactionRepository;
 import com.bms.model.Account;
@@ -13,6 +13,8 @@ import jakarta.transaction.Transactional;
 @Service
 @Transactional
 public class BankingServiesImpl implements BankingService {
+
+    private final TransactionController transactionController;
 
 	@Autowired
 	TransactionRepository transRepo;
@@ -25,6 +27,10 @@ public class BankingServiesImpl implements BankingService {
 	
 	@Autowired
 	TransactionService transService;
+
+    BankingServiesImpl(TransactionController transactionController) {
+        this.transactionController = transactionController;
+    }
 	
 	@Override
 	public Transaction withdrawMoney(int id,int amount) {
@@ -53,6 +59,7 @@ public class BankingServiesImpl implements BankingService {
 	
 	@Override
 	public boolean transferWithinAccounts(int sender , int receiver , int amount) {
+		System.out.println("request to transfer from " + sender + " to receiver " + receiver + " amount "+ amount);
 		Account senderacc = accRepo.findById(sender).orElse(null);
 		Account receiveracc = accRepo.findById(receiver).orElse(null);
 		

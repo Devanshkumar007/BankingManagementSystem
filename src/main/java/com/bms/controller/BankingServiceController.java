@@ -55,6 +55,7 @@ public class BankingServiceController {
      */
     @PostMapping("/transfer")
     public ResponseEntity<String> transferMoney(@RequestBody TransferRequest request) {
+    	System.out.println("request to transfer " + request);
         boolean success = bankingService.transferWithinAccounts(
                 request.getSenderAccountId(),
                 request.getReceiverAccountId(),
@@ -90,8 +91,14 @@ public class BankingServiceController {
         public int getSenderAccountId() { return senderAccountId; }
         public void setSenderAccountId(int senderAccountId) { this.senderAccountId = senderAccountId; }
         public int getReceiverAccountId() { return receiverAccountId; }
-        public void setReceiverAccountId(int amount) { this.amount = amount; }
+        public void setReceiverAccountId(int receiverAccountId) { this.receiverAccountId = receiverAccountId; }
         public int getAmount() { return amount; }
         public void setAmount(int amount) { this.amount = amount; }
+		@Override
+		public String toString() {
+			return "TransferRequest [senderAccountId=" + senderAccountId + ", receiverAccountId=" + receiverAccountId
+					+ ", amount=" + amount + "]";
+		}
+        
     }
 }
