@@ -1,5 +1,7 @@
 package com.bms.service;
 
+import java.util.List;
+
 import com.bms.model.Person;
 
 public interface PersonService {
@@ -8,5 +10,7 @@ public interface PersonService {
 	Boolean removePerson(int id);
 	Person findById(int id);
 	Person updatePerson(Person p);
-	Person addAccount(int id);
+	Person addAccount(int id,int accid);
+	List<Person> findall();
+	
 }

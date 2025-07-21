@@ -38,4 +38,10 @@ public class TransactionServiceImpl implements TransactionService{
 		return transRepo.findByAccountId(id);
 	}
 
+	@Override
+	public List<Transaction> findAll() {
+		// TODO Auto-generated method stub
+		return transRepo.findAll();
+	}
+
 }

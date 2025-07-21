@@ -3,6 +3,10 @@ package com.bms.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
@@ -18,9 +22,14 @@ public class Person {
 	private String address;
 	private String role;
 	
-	@OneToMany
-	@JoinColumn(name = "accountNo")
-	List<Account> accounts ;
+	
+	
+	@OneToMany(mappedBy = "person", cascade = CascadeType.ALL, orphanRemoval = true)
+	@JsonManagedReference
+	List<Account> accounts = new ArrayList<>();
+//	@OneToMany(mappedBy = "person")
+//	private List<Account> accounts = new ArrayList<>();
+
 	
 	public Person(int id, String name, String phoneNo, String address, String role){
 		super();
@@ -29,7 +38,7 @@ public class Person {
 		this.phoneNo = phoneNo;
 		this.address = address;
 		this.role = role;
-		this.accounts = new ArrayList<>();
+//		this.accounts = new ArrayList<>();
 	}
 	public Person() {
 		super();

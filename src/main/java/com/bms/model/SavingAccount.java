@@ -10,12 +10,14 @@ public class SavingAccount extends Account {
 	double interestRate;
 	double minBalance;
 	public SavingAccount(int accountNo, String type, Person person) {
-		super();
+		super(accountNo,type,person);
 		this.interestRate = person.getRole().equals("customer") ? 6.5 : 8 ;
 		this.minBalance = 0;
 	}
 	public SavingAccount() {
 		super();
+		this.interestRate = 6.5 ;
+		this.minBalance = 0;
 		// TODO Auto-generated constructor stub
 	}
 	public double getInterestRate() {

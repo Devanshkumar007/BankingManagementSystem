@@ -21,9 +21,9 @@ public class CurrentAccountServiceImpl implements CurrentAccountService{
 	@Override
 	@Transactional
 	public CurrentAccount addCurrentAccount(CurrentAccount account) {
-		CurrentAccount newCurrentAccount = account;
-		currRepo.save(newCurrentAccount);
-		return newCurrentAccount;
+		if( currRepo.findById(account.getAccountNo()).isPresent() ) return null; 
+		currRepo.save(account);
+		return account;
 	}
 
 	@Override
@@ -61,6 +61,18 @@ public class CurrentAccountServiceImpl implements CurrentAccountService{
 	@Override
 	public CurrentAccount disableAccount(CurrentAccount ac) {
 		// TODO Auto-generated method stub
-		return null;
+		Optional<CurrentAccount> opt = currRepo.findById(ac.getAccountNo());
+		if(opt.get() == null) return null;
+		opt.get().setStatus(false);
+		return ac;
 	}
+	
+	@Override
+	public CurrentAccount enableAccount(CurrentAccount ac) {
+		Optional<CurrentAccount> opt = currRepo.findById(ac.getAccountNo());
+		if(opt.get() == null) return null;
+		opt.get().setStatus(true);
+		return ac;
+	}
+	
 }

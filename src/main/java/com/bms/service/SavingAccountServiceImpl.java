@@ -3,6 +3,8 @@ package com.bms.service;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.bms.dao.SavingAccountRepository;
 import com.bms.model.Account;
 import com.bms.model.SavingAccount;
@@ -10,6 +12,7 @@ import com.bms.model.Transaction;
 
 import jakarta.transaction.Transactional;
 
+@Service
 public class SavingAccountServiceImpl implements SavingAccountService {
 
 	@Autowired
@@ -18,9 +21,9 @@ public class SavingAccountServiceImpl implements SavingAccountService {
 	@Override
 	@Transactional
 	public SavingAccount addSavingAccount(SavingAccount account) {
-		SavingAccount newSavingAccount = account;
-		savingRepo.save(newSavingAccount);
-		return newSavingAccount;
+		if( savingRepo.findById(account.getAccountNo()).isPresent() ) return null; 
+		savingRepo.save(account);
+		return account;
 	}
 
 	@Override
@@ -59,6 +62,13 @@ public class SavingAccountServiceImpl implements SavingAccountService {
 		// TODO Auto-generated method stub
 		SavingAccount account = savingRepo.findById(ac.getAccountNo()).orElse(null);
 		if( account !=null ) account.setStatus(false);
+		return account;
+	}
+
+	@Override
+	public SavingAccount enableAccount(SavingAccount ac) {
+		SavingAccount account = savingRepo.findById(ac.getAccountNo()).orElse(null);
+		if( account !=null ) account.setStatus(true);
 		return account;
 	}
 }

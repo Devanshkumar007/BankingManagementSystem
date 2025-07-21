@@ -3,6 +3,9 @@ package com.bms.model;
 import java.sql.Date;
 import java.time.LocalDate;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.annotation.Generated;
 import jakarta.persistence.DiscriminatorColumn;
 import jakarta.persistence.Entity;
@@ -31,11 +34,14 @@ public class Account {
 	private Boolean status;
 	
 	@ManyToOne
-	@JoinColumn(name = "id")
+	@JoinColumn(name = "person_id") // Proper FK column
+	@JsonBackReference 
 	Person person;
 
 	public Account() {
 		super();
+		this.openingDate = Date.valueOf(LocalDate.now());
+		this.status = true;
 		// TODO Auto-generated constructor stub
 	}
 

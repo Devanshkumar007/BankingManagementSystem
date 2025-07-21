@@ -1,5 +1,6 @@
 package com.bms.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,25 +15,25 @@ import jakarta.transaction.Transactional;
 public class AccountServiceImpl implements AccountService{
 
 	@Autowired
-	AccountRepository acDao;
+	AccountRepository acRepo;
 	
 	@Override
 	@Transactional
 	public Account addAccount(Account c) {
-		Account newAccount = c;
-		acDao.save(newAccount);
-		return newAccount;
+		if( acRepo.findById(c.getAccountNo()).isPresent() ) return null; 
+		acRepo.save(c);
+		return c;
 	}
 
 	@Override
 	@Transactional
 	public Boolean removeAccount(int id) {
-		// TODO Auto-generated method stub
-		Optional<Account> opt = acDao.findById(id);
-		if(opt.get() == null) return false;
-		acDao.deleteById(id);
-		return true;
+	    Optional<Account> opt = acRepo.findById(id);
+	    if(opt.isEmpty()) return false;
+	    acRepo.deleteById(id);
+	    return true;
 	}
+
 
 	@Override
 	@Transactional
@@ -41,12 +42,18 @@ public class AccountServiceImpl implements AccountService{
 		return c;
 	}
 
+	
 	@Override
 	public Account findById(int id) {
-		// TODO Auto-generated method stub
-		Optional<Account> opt = acDao.findById(id);
-		if(opt.get() == null) return null;
-		return opt.get();
+	    Optional<Account> opt = acRepo.findById(id);
+	    return opt.orElse(null);
 	}
+
+	@Override
+	public List<Account> findall() {
+		// TODO Auto-generated method stub
+		return acRepo.findAll();
+	}
+
 
 }

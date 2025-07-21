@@ -15,4 +15,6 @@ public interface TransactionRepository extends JpaRepository<Transaction, Intege
 	
 	@Query("SELECT t FROM Transaction t WHERE t.account.id = :id")
     List<Transaction> findByAccountId(int id);
+	
+	
 }

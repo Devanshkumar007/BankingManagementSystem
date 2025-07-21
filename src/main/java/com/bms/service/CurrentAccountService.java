@@ -10,4 +10,6 @@ public interface CurrentAccountService {
 	CurrentAccount findById(int c);
 	double getBalance(CurrentAccount ac);
 	CurrentAccount disableAccount(CurrentAccount ac);
+	CurrentAccount enableAccount(CurrentAccount ac);
+	
 }

@@ -13,5 +13,6 @@ public interface SavingAccountService {
 	SavingAccount findById(int id);
 	double getBalance(SavingAccount ac);
 	SavingAccount disableAccount(SavingAccount ac);
+	SavingAccount enableAccount(SavingAccount ac);
 	
 }

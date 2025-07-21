@@ -8,7 +8,7 @@ import jakarta.persistence.Entity;
 public class CurrentAccount extends Account{
 	
 	double overdraftLimit;
-	double minBalance;
+	double minBalance = 10000;
 	public CurrentAccount(int accountNo, String type, Person person , double overdraftLimit) {
 		super(accountNo,type,person);
 		this.overdraftLimit = overdraftLimit;
@@ -16,7 +16,8 @@ public class CurrentAccount extends Account{
 	}
 	public CurrentAccount() {
 		super();
-		// TODO Auto-generated constructor stub
+		this.minBalance = 10000;
+	
 	}
 	public double getOverdraftLimit() {
 		return overdraftLimit;

@@ -1,5 +1,7 @@
 package com.bms.service;
 
+import java.util.List;
+
 import com.bms.model.Account;
 
 public interface AccountService {
@@ -7,5 +9,6 @@ public interface AccountService {
 	Boolean removeAccount(int id);
 	Account updateAccount(Account c);
 	Account findById(int c);
+	List<Account> findall();
 	
 }
