@@ -12,5 +12,6 @@ public interface PersonService {
 	Person updatePerson(Person p);
 	Person addAccount(int id,int accid);
 	List<Person> findall();
+	Person deleteAccount(int pid, int accid);
 	
 }

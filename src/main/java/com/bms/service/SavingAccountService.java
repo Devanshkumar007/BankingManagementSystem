@@ -9,7 +9,6 @@ public interface SavingAccountService {
 
 	SavingAccount addSavingAccount(SavingAccount c);
 	Boolean removeSavingAccount(int id);
-	SavingAccount updateSavingAccount(SavingAccount c);
 	SavingAccount findById(int id);
 	double getBalance(SavingAccount ac);
 	SavingAccount disableAccount(SavingAccount ac);

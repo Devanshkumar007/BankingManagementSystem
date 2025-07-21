@@ -11,7 +11,7 @@ function displayMessage(elementId, message, type) {
         element.textContent = '';
         element.className = 'message';
         element.style.display = 'none'; // Hide message after timeout
-    }, 10000); // Clear message after 5 seconds
+    }, 10000); // Clear message after 10 seconds
 }
 
 // --- Toggle Account Specific Fields and Validation Message ---
@@ -26,6 +26,145 @@ function toggleAccountFields() {
         currentAccountMinBalanceMsg.textContent = `Initial balance must be greater than ${CURRENT_ACCOUNT_MIN_BALANCE}.`;
         currentAccountMinBalanceMsg.style.display = 'block'; // Show the requirement message
     }
+}
+
+// --- Helper function to render an array of objects as a table ---
+// This function takes an array of data objects and the ID of the container where the table will be rendered.
+function renderTable(data, containerId) {
+    const container = document.getElementById(containerId);
+    container.innerHTML = ''; // Clear previous content in the container
+
+    // If no data or empty array, display a message and exit
+    if (!data || data.length === 0) {
+        container.textContent = 'No data found.';
+        return;
+    }
+
+    // Create table elements
+    const table = document.createElement('table');
+    const thead = document.createElement('thead');
+    const tbody = document.createElement('tbody');
+    table.appendChild(thead);
+    table.appendChild(tbody);
+
+    // Collect all unique keys from all objects to ensure all columns are present, especially for polymorphic types
+    const allKeys = new Set();
+    data.forEach(item => {
+        for (const key in item) {
+            allKeys.add(key);
+        }
+    });
+
+    // Convert Set of keys to an array and sort them alphabetically for consistent column order
+    const headers = Array.from(allKeys).sort();
+
+    // Create table header row
+    const headerRow = document.createElement('tr');
+    headers.forEach(key => {
+        const th = document.createElement('th');
+        // Convert camelCase keys to a more readable Title Case (e.g., 'phoneNo' -> 'Phone No')
+        th.textContent = key.replace(/^./, str => str.toUpperCase());
+        headerRow.appendChild(th);
+    });
+    thead.appendChild(headerRow);
+
+    // Create table rows for each data item
+    data.forEach(item => {
+        const row = document.createElement('tr');
+        headers.forEach(key => {
+            const td = document.createElement('td');
+            let value = item[key];
+
+            // Special handling for nested objects (like 'person' in Account, 'account' in Transaction)
+            // or for arrays (like 'accounts' in Person, 'transactions' in Account)
+            if (key === 'person' && value && value.id) {
+                // Display key details for associated Person
+                td.textContent = `ID: ${value.id}, Name: ${value.name}`;
+            } else if (key === 'account' && value && value.accountNo) {
+                // Display key details for associated Account
+                td.textContent = `Acc No: ${value.accountNo}, Type: ${value.type}`;
+            } else if (Array.isArray(value)) {
+                // For arrays, just show the count to avoid deep nesting in tables
+                td.textContent = `[${value.length} items]`;
+            } else if (typeof value === 'object' && value !== null) {
+                // Generic handling for other complex nested objects
+                td.textContent = `[Object]`;
+            } else {
+                // For simple values (strings, numbers, booleans, dates)
+                td.textContent = value !== null ? value : ''; // Display empty string for null values
+            }
+            row.appendChild(td);
+        });
+        tbody.appendChild(row);
+    });
+
+    container.appendChild(table); // Add the complete table to the container
+}
+
+// --- Helper function to render a single object's details (e.g., from 'Get by ID' actions) ---
+// Displays details in a definition list format (dt for key, dd for value)
+function renderObjectDetails(data, containerId) {
+    const container = document.getElementById(containerId);
+    container.innerHTML = ''; // Clear previous content
+
+    // If no data, display a message and exit
+    if (!data) {
+        container.textContent = 'No data found.';
+        return;
+    }
+
+    const dl = document.createElement('dl'); // Create a definition list
+    dl.classList.add('object-details'); // Add a class for specific styling
+
+    for (const key in data) {
+        const dt = document.createElement('dt'); // Definition term (for the key/label)
+        // Convert camelCase keys to a more readable Title Case
+        dt.textContent = key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase()) + ':';
+        dl.appendChild(dt);
+
+        const dd = document.createElement('dd'); // Definition description (for the value)
+        let value = data[key];
+
+        // Special handling for specific nested objects/arrays to display more detail
+        if (key === 'person' && value && value.id) {
+            dd.textContent = `ID: ${value.id}, Name: ${value.name}`;
+        } else if (key === 'account' && value && value.accountNo) {
+            dd.textContent = `Acc No: ${value.accountNo}, Type: ${value.type}`;
+        } else if (Array.isArray(value)) {
+            // For nested arrays, create an unordered list to show individual items
+            if (value.length > 0) {
+                 const ul = document.createElement('ul');
+                 ul.style.listStyle = 'none'; // Remove default bullet points
+                 ul.style.paddingLeft = '10px'; // Add some left padding
+                 value.forEach(item => {
+                     const li = document.createElement('li');
+                     // Customize display based on the type of array items
+                     if (key === 'accounts' && item.accountNo) {
+                        li.textContent = `Account: ${item.accountNo} (Type: ${item.type}, Balance: ${item.balance})`;
+                     } else if (key === 'transactions' && item.transactionId) {
+                         li.textContent = `Transaction: ${item.transactionId} (Type: ${item.type}, Amount: ${item.amount})`;
+                     } else if (item.id) { // Generic item with an ID
+                         li.textContent = `ID: ${item.id}`;
+                     } else { // Fallback for other unhandled objects in arrays
+                         li.textContent = `[Object]`;
+                     }
+                     ul.appendChild(li);
+                 });
+                 dd.appendChild(ul);
+            } else {
+                dd.textContent = `[No ${key} linked]`; // Message for empty arrays
+            }
+
+        } else if (typeof value === 'object' && value !== null) {
+            // Fallback for other generic nested objects
+            dd.textContent = `[Object]`;
+        } else {
+            // For simple values, display value or 'N/A' if null
+            dd.textContent = value !== null ? value : 'N/A';
+        }
+        dl.appendChild(dd);
+    }
+    container.appendChild(dl); // Add the complete definition list to the container
 }
 
 // --- Add New Person ---
@@ -63,6 +202,76 @@ document.getElementById('addPersonForm').addEventListener('submit', async (event
         console.error('Error:', error);
     }
 });
+
+
+// --- Update Person ---
+document.getElementById('updatePersonForm').addEventListener('submit', async (event) => {
+    event.preventDefault();
+    const person = {
+        id: parseInt(document.getElementById('updatePersonId').value),
+        name: document.getElementById('updatePersonName').value,
+        phoneNo: document.getElementById('updatePersonPhone').value,
+        address: document.getElementById('updatePersonAddress').value,
+        role: document.getElementById('updatePersonRole').value
+    };
+
+    try {
+        const response = await fetch(`${API_BASE_URL}/persons`, { // Assuming PUT /api/persons is used for update
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(person)
+        });
+
+        if (response.ok) {
+            const updatedPerson = await response.json();
+            displayMessage('updatePersonMessage', `Person ${updatedPerson.id} updated successfully!`, 'success');
+            document.getElementById('updatePersonForm').reset();
+        } else if (response.status === 404) {
+            displayMessage('updatePersonMessage', 'Error: Person not found for update.', 'error');
+        } else {
+            const errorText = await response.text();
+            displayMessage('updatePersonMessage', `Error updating person: ${errorText}`, 'error');
+        }
+    } catch (error) {
+        displayMessage('updatePersonMessage', `Network error: ${error.message}`, 'error');
+        console.error('Error:', error);
+    }
+});
+
+// --- Delete Account from Person ---
+document.getElementById('deleteAccountFromPersonForm').addEventListener('submit', async (event) => {
+    event.preventDefault();
+    const personId = parseInt(document.getElementById('deleteAccPersonId').value);
+    const accountId = parseInt(document.getElementById('deleteAccountId').value);
+
+    // Assuming a DELETE request to /api/persons/{personId}/accounts/{accountId}
+    // You might also use a POST/PUT with a request body if DELETE is not suitable for your backend's design
+    try {
+        const response = await fetch(`${API_BASE_URL}/persons/${personId}/accounts/${accountId}`, {
+            method: 'DELETE', // Assuming DELETE is used for this specific action
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+
+        if (response.ok || response.status === 200) { // Backend might return 200 OK or 204 No Content
+            const updatedPerson = await response.json(); // Backend might return updated person or nothing
+            displayMessage('deleteAccountMessage', `Account ${accountId} deleted from Person ${personId} successfully!`, 'success');
+            document.getElementById('deleteAccountFromPersonForm').reset();
+        } else if (response.status === 404) {
+            displayMessage('deleteAccountMessage', 'Error: Person or Account not found.', 'error');
+        } else {
+            const errorText = await response.text();
+            displayMessage('deleteAccountMessage', `Error deleting account: ${errorText}`, 'error');
+        }
+    } catch (error) {
+        displayMessage('deleteAccountMessage', `Network error: ${error.message}`, 'error');
+        console.error('Error:', error);
+    }
+});
+
 
 // --- Create New Account (Saving or Current) ---
 document.getElementById('createAccountForm').addEventListener('submit', async (event) => {
@@ -259,11 +468,12 @@ document.getElementById('transferForm').addEventListener('submit', async (event)
 // --- Get Person by ID ---
 async function getPerson() {
     const personId = document.getElementById('getPersonId').value;
-    const personDataElement = document.getElementById('personData');
-    personDataElement.textContent = 'Fetching...';
+    // Get the container for displaying person data
+    const container = document.getElementById('personDataContainer');
+    container.textContent = 'Fetching...'; // Show loading message
 
     if (!personId) {
-        personDataElement.textContent = 'Please enter a Person ID.';
+        container.textContent = 'Please enter a Person ID.';
         return;
     }
 
@@ -271,15 +481,16 @@ async function getPerson() {
         const response = await fetch(`${API_BASE_URL}/persons/${personId}`);
         if (response.ok) {
             const person = await response.json();
-            personDataElement.textContent = JSON.stringify(person, null, 2);
+            // Use the helper function to render single object details
+            renderObjectDetails(person, 'personDataContainer');
         } else if (response.status === 404) {
-            personDataElement.textContent = `Person with ID ${personId} not found.`;
+            container.textContent = `Person with ID ${personId} not found.`;
         } else {
             const errorText = await response.text();
-            personDataElement.textContent = `Error: ${errorText}`;
+            container.textContent = `Error: ${errorText}`;
         }
     } catch (error) {
-        personDataElement.textContent = `Network error: ${error.message}`;
+        container.textContent = `Network error: ${error.message}`;
         console.error('Error:', error);
     }
 }
@@ -287,11 +498,12 @@ async function getPerson() {
 // --- Get Account by ID ---
 async function getAccount() {
     const accountId = document.getElementById('getAccountId').value;
-    const accountDataElement = document.getElementById('accountData');
-    accountDataElement.textContent = 'Fetching...';
+    // Get the container for displaying account data
+    const container = document.getElementById('accountDataContainer');
+    container.textContent = 'Fetching...'; // Show loading message
 
     if (!accountId) {
-        accountDataElement.textContent = 'Please enter an Account ID.';
+        container.textContent = 'Please enter an Account ID.';
         return;
     }
 
@@ -299,15 +511,16 @@ async function getAccount() {
         const response = await fetch(`${API_BASE_URL}/accounts/${accountId}`); // Using generic account endpoint
         if (response.ok) {
             const account = await response.json();
-            accountDataElement.textContent = JSON.stringify(account, null, 2);
+            // Use the helper function to render single object details
+            renderObjectDetails(account, 'accountDataContainer');
         } else if (response.status === 404) {
-            accountDataElement.textContent = `Account with ID ${accountId} not found.`;
+            container.textContent = `Account with ID ${accountId} not found.`;
         } else {
             const errorText = await response.text();
-            accountDataElement.textContent = `Error: ${errorText}`;
+            container.textContent = `Error: ${errorText}`;
         }
     } catch (error) {
-        accountDataElement.textContent = `Network error: ${error.message}`;
+        container.textContent = `Network error: ${error.message}`;
         console.error('Error:', error);
     }
 }
@@ -315,11 +528,12 @@ async function getAccount() {
 // --- Get Transactions by Account ID ---
 async function getTransactionsByAccount() {
     const accountId = document.getElementById('getTransactionsAccountId').value;
-    const transactionsDataElement = document.getElementById('transactionsData');
-    transactionsDataElement.textContent = 'Fetching...';
+    // Get the container for displaying transactions data
+    const container = document.getElementById('transactionsDataContainer');
+    container.textContent = 'Fetching...'; // Show loading message
 
     if (!accountId) {
-        transactionsDataElement.textContent = 'Please enter an Account ID.';
+        container.textContent = 'Please enter an Account ID.';
         return;
     }
 
@@ -327,94 +541,89 @@ async function getTransactionsByAccount() {
         const response = await fetch(`${API_BASE_URL}/transactions/account/${accountId}`);
         if (response.ok) {
             const transactions = await response.json();
-            if (transactions.length > 0) {
-                transactionsDataElement.textContent = JSON.stringify(transactions, null, 2);
-            } else {
-                transactionsDataElement.textContent = `No transactions found for Account ID ${accountId}.`;
-            }
-        } else if (response.status === 404) {
-            transactionsDataElement.textContent = `No transactions found for Account ID ${accountId}.`;
-        } else {
+            // Use the helper function to render data as a table
+            renderTable(transactions, 'transactionsDataContainer');
+        } else if (response.status === 204) { // Handle 204 No Content if list is empty
+            container.textContent = `No transactions found for Account ID ${accountId}.`;
+        }
+        else {
             const errorText = await response.text();
-            transactionsDataElement.textContent = `Error: ${errorText}`;
+            container.textContent = `Error: ${errorText}`;
         }
     } catch (error) {
-        transactionsDataElement.textContent = `Network error: ${error.message}`;
+        container.textContent = `Network error: ${error.message}`;
         console.error('Error:', error);
     }
 }
 
+// --- Fetch and Display All Persons ---
 async function getAllPersons() {
-    const allPersonsDataElement = document.getElementById('allPersonsData');
-    allPersonsDataElement.textContent = 'Fetching all persons...';
+    // Get the container for displaying all persons data
+    const container = document.getElementById('allPersonsDataContainer');
+    container.textContent = 'Fetching all persons...'; // Show loading message
     try {
         const response = await fetch(`${API_BASE_URL}/persons`);
         if (response.ok) {
             const persons = await response.json();
-            if (persons.length > 0) {
-                allPersonsDataElement.textContent = JSON.stringify(persons, null, 2);
-            } else {
-                allPersonsDataElement.textContent = 'No persons found.';
-            }
-        } else if (response.status === 204) { // Handle 204 No Content
-            allPersonsDataElement.textContent = 'No persons found.';
+            // Use the helper function to render data as a table
+            renderTable(persons, 'allPersonsDataContainer');
+        } else if (response.status === 204) { // Handle 204 No Content if list is empty
+            container.textContent = 'No persons found.';
         }
         else {
             const errorText = await response.text();
-            allPersonsDataElement.textContent = `Error fetching all persons: ${errorText}`;
+            container.textContent = `Error fetching all persons: ${errorText}`;
         }
     } catch (error) {
-        allPersonsDataElement.textContent = `Network error: ${error.message}`;
+        container.textContent = `Network error: ${error.message}`;
         console.error('Error:', error);
     }
 }
 
+// --- Fetch and Display All Accounts ---
 async function getAllAccounts() {
-    const allAccountsDataElement = document.getElementById('allAccountsData');
-    allAccountsDataElement.textContent = 'Fetching all accounts...';
+    // Get the container for displaying all accounts data
+    const container = document.getElementById('allAccountsDataContainer');
+    container.textContent = 'Fetching all accounts...'; // Show loading message
     try {
         const response = await fetch(`${API_BASE_URL}/accounts`);
         if (response.ok) {
             const accounts = await response.json();
-            if (accounts.length > 0) {
-                allAccountsDataElement.textContent = JSON.stringify(accounts, null, 2);
-            } else {
-                allAccountsDataElement.textContent = 'No accounts found.';
-            }
-        } else if (response.status === 204) { // Handle 204 No Content
-            allAccountsDataElement.textContent = 'No accounts found.';
+            // Use the helper function to render data as a table
+            renderTable(accounts, 'allAccountsDataContainer');
+        } else if (response.status === 204) { // Handle 204 No Content if list is empty
+            container.textContent = 'No accounts found.';
         }
         else {
             const errorText = await response.text();
-            allAccountsDataElement.textContent = `Error fetching all accounts: ${errorText}`;
+            container.textContent = `Error fetching all accounts: ${errorText}`;
         }
     } catch (error) {
-        allAccountsDataElement.textContent = `Network error: ${error.message}`;
+        container.textContent = `Network error: ${error.message}`;
         console.error('Error:', error);
     }
 }
 
+// --- Fetch and Display All Transactions ---
 async function getAllTransactions() {
-    const allTransactionsDataElement = document.getElementById('allTransactionsData');
-    allTransactionsDataElement.textContent = 'Fetching all transactions...';
+    // Get the container for displaying all transactions data
+    const container = document.getElementById('allTransactionsDataContainer');
+    container.textContent = 'Fetching all transactions...'; // Show loading message
     try {
         const response = await fetch(`${API_BASE_URL}/transactions`);
         if (response.ok) {
             const transactions = await response.json();
-            if (transactions.length > 0) {
-                allTransactionsDataElement.textContent = JSON.stringify(transactions, null, 2);
-            } else {
-                allTransactionsDataElement.textContent = 'No transactions found.';
-            }
-        } else if (response.status === 204) { // Handle 204 No Content
-            allTransactionsDataElement.textContent = 'No transactions found.';
+            // Use the helper function to render data as a table
+            renderTable(transactions, 'allTransactionsDataContainer');
+        } else if (response.status === 204) { // Handle 204 No Content if list is empty
+            container.textContent = 'No transactions found.';
         }
         else {
             const errorText = await response.text();
-            allTransactionsDataElement.textContent = `Error fetching all transactions: ${errorText}`;
+            container.textContent = `Error fetching all transactions: ${errorText}`;
         }
     } catch (error) {
-        allTransactionsDataElement.textContent = `Network error: ${error.message}`;
+        container.textContent = `Network error: ${error.message}`;
         console.error('Error:', error);
     }
 }

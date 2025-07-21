@@ -34,14 +34,6 @@ public class AccountServiceImpl implements AccountService{
 	    return true;
 	}
 
-
-	@Override
-	@Transactional
-	public Account updateAccount(Account c) {
-		//TODO
-		return c;
-	}
-
 	
 	@Override
 	public Account findById(int id) {

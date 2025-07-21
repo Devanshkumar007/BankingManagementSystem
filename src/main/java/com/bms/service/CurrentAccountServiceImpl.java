@@ -36,13 +36,7 @@ public class CurrentAccountServiceImpl implements CurrentAccountService{
 		return true;
 	}
 
-	@Override
-	@Transactional
-	public CurrentAccount updateCurrentAccount(CurrentAccount account) {
-		//TODO
-		return account;
-	}
-
+	
 	@Override
 	public CurrentAccount findById(int id) {
 		// TODO Auto-generated method stub

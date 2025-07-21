@@ -42,15 +42,15 @@ public class CurrentAccountController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @PutMapping // PUT /api/current-accounts (requires an 'updateCurrentAccount' implementation)
-    public ResponseEntity<CurrentAccount> updateCurrentAccount(@RequestBody CurrentAccount currentAccount) {
-        // **TODO: Implement updateCurrentAccount in CurrentAccountServiceImpl first**
-        CurrentAccount updatedAccount = currentAccountService.updateCurrentAccount(currentAccount);
-        if (updatedAccount != null) {
-            return new ResponseEntity<>(updatedAccount, HttpStatus.OK);
-        }
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    }
+//    @PutMapping // PUT /api/current-accounts (requires an 'updateCurrentAccount' implementation)
+//    public ResponseEntity<CurrentAccount> updateCurrentAccount(@RequestBody CurrentAccount currentAccount) {
+//        // **TODO: Implement updateCurrentAccount in CurrentAccountServiceImpl first**
+//        CurrentAccount updatedAccount = currentAccountService.updateCurrentAccount(currentAccount);
+//        if (updatedAccount != null) {
+//            return new ResponseEntity<>(updatedAccount, HttpStatus.OK);
+//        }
+//        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+//    }
 
     @GetMapping("/{id}/balance") // GET /api/current-accounts/{id}/balance
     public ResponseEntity<Double> getCurrentAccountBalance(@PathVariable int id) {

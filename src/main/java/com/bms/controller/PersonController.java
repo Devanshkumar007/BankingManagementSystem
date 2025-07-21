@@ -45,15 +45,15 @@ public class PersonController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @PutMapping // PUT /api/persons (requires 'updatePerson' implementation)
+    @PutMapping // This maps to PUT /api/persons
     public ResponseEntity<Person> updatePerson(@RequestBody Person person) {
-        // **TODO: Implement updatePerson in PersonServiceImpl first**
         Person updatedPerson = personService.updatePerson(person);
         if (updatedPerson != null) {
             return new ResponseEntity<>(updatedPerson, HttpStatus.OK);
         }
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND); // Return 404 if person not found for update
     }
+
 
     // Endpoint to add an existing account to a person
     // You might also consider a DTO for this to make it clearer what's being passed
@@ -65,6 +65,20 @@ public class PersonController {
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND); // Or BAD_REQUEST if relationship already exists
     }
+    
+    @DeleteMapping("/{personId}/accounts/{accountId}")
+    public ResponseEntity<Person> deleteAccountFromPerson(@PathVariable int personId, @PathVariable int accountId) {
+        Person updatedPerson = personService.deleteAccount(personId, accountId);
+        if (updatedPerson != null) {
+            // Return the updated person object and 200 OK, or 204 No Content if you prefer
+            return new ResponseEntity<>(updatedPerson, HttpStatus.OK);
+        }
+        // Return 404 if person or account not found, or 400 if account not linked
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+    
+    
+    
     @GetMapping // <-- ADD THIS: GET /api/persons to get all persons
     public ResponseEntity<List<Person>> getAllPersons() {
         List<Person> persons = personService.findall();

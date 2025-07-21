@@ -49,15 +49,15 @@ public class AccountController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @PutMapping // PUT /api/accounts (requires an 'updateAccount' implementation in service)
-    public ResponseEntity<Account> updateAccount(@RequestBody Account account) {
-        // **TODO: Implement updateAccount in AccountServiceImpl first**
-        Account updatedAccount = accountService.updateAccount(account);
-        if (updatedAccount != null) {
-            return new ResponseEntity<>(updatedAccount, HttpStatus.OK);
-        }
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    }
+//    @PutMapping // PUT /api/accounts (requires an 'updateAccount' implementation in service)
+//    public ResponseEntity<Account> updateAccount(@RequestBody Account account) {
+//        // **TODO: Implement updateAccount in AccountServiceImpl first**
+//        Account updatedAccount = accountService.updateAccount(account);
+//        if (updatedAccount != null) {
+//            return new ResponseEntity<>(updatedAccount, HttpStatus.OK);
+//        }
+//        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+//    }
     
     @GetMapping
     public ResponseEntity<List<Account>> getAllPersons(){

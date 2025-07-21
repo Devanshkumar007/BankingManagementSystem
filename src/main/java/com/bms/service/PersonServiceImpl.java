@@ -52,7 +52,13 @@ public class PersonServiceImpl implements PersonService{
 	@Transactional
 	public Person updatePerson(Person p) {
 		// TODO Auto-generated method stub
-		return p;
+		Person update = findById(p.getId());
+		if(update == null) return null;
+		update.setName(p.getName());
+		update.setAddress(p.getAddress());
+		update.setPhoneNo(p.getPhoneNo());
+		update.setRole(p.getRole());
+		return update;
 	}
 
 	@Override
@@ -68,6 +74,17 @@ public class PersonServiceImpl implements PersonService{
 	@Override
 	public List<Person> findall() {
 		return personRepo.findAll();
+	}
+
+	@Override
+	@Transactional
+	public Person deleteAccount(int pid, int accid) {
+		// TODO Auto-generated method stub
+		Person curr = findById(pid);
+		if(curr==null) return null;
+		List<Account> acc = curr.getAccounts();
+		acc.removeIf(a -> a.getAccountNo() == accid);
+		return curr;
 	}
 
 }

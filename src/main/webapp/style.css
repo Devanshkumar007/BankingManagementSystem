@@ -1,4 +1,4 @@
-@charset "UTF-8";body {
+body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
@@ -7,7 +7,7 @@
 }
 
 header {
-    background-color: #4CAF50;
+    background-color: #4CAF50; /* A shade of green */
     color: white;
     padding: 1rem 0;
     text-align: center;
@@ -37,21 +37,34 @@ h2, h3 {
     margin-top: 0;
 }
 
+/* Styling for radio button groups */
+.radio-group {
+    margin-bottom: 15px;
+}
+
+.radio-group label {
+    display: inline-block;
+    margin-right: 15px;
+    font-weight: bold;
+}
+
+/* Styling for form labels and inputs */
 form label {
     display: inline-block;
-    width: 120px;
+    width: 120px; /* Aligns labels */
     margin-bottom: 8px;
 }
 
 form input[type="text"],
 form input[type="number"] {
-    width: calc(100% - 130px);
+    width: calc(100% - 130px); /* Adjusts width considering label and padding */
     padding: 8px;
     margin-bottom: 10px;
     border: 1px solid #ccc;
     border-radius: 4px;
 }
 
+/* Styling for buttons */
 button {
     background-color: #4CAF50;
     color: white;
@@ -60,44 +73,95 @@ button {
     border-radius: 4px;
     cursor: pointer;
     font-size: 16px;
-    transition: background-color 0.3s ease;
+    transition: background-color 0.3s ease; /* Smooth hover effect */
 }
 
 button:hover {
-    background-color: #45a049;
+    background-color: #45a049; /* Darker green on hover */
 }
 
+/* Styling for messages (success/error) */
 .message {
     margin-top: 15px;
     padding: 10px;
     border-radius: 4px;
     font-weight: bold;
+    display: none; /* Hidden by default, shown by JavaScript */
 }
 
 .message.success {
-    background-color: #d4edda;
-    color: #155724;
+    background-color: #d4edda; /* Light green background */
+    color: #155724; /* Dark green text */
     border-color: #c3e6cb;
 }
 
 .message.error {
-    background-color: #f8d7da;
-    color: #721c24;
+    background-color: #f8d7da; /* Light red background */
+    color: #721c24; /* Dark red text */
     border-color: #f5c6cb;
 }
 
-.data-display {
+/* Styling for data display containers (where tables/lists appear) */
+.data-display-container {
     background-color: #eee;
     padding: 15px;
     border-radius: 5px;
-    white-space: pre-wrap; /* Preserve whitespace and wrap text */
-    word-wrap: break-word; /* Break long words */
-    max-height: 300px;
-    overflow-y: auto;
+    max-height: 400px; /* Limits height for scrollable content */
+    overflow-y: auto; /* Enables vertical scrolling if content overflows */
+    margin-top: 15px;
+    box-shadow: inset 0 0 5px rgba(0,0,0,0.1); /* Subtle inner shadow */
 }
 
+/* Styling for tables within data display containers */
+.data-display-container table {
+    width: 100%;
+    border-collapse: collapse; /* Removes spaces between borders */
+    margin: 0;
+    font-size: 0.9em; /* Slightly smaller font for table content */
+    min-width: 400px; /* Ensures table doesn't get too narrow */
+}
+
+.data-display-container th,
+.data-display-container td {
+    padding: 8px 12px;
+    border: 1px solid #ddd; /* Light grey borders */
+    text-align: left;
+    word-break: break-word; /* Breaks long words to fit in columns */
+}
+
+.data-display-container th {
+    background-color: #4CAF50;
+    color: white;
+    font-weight: bold;
+    position: sticky; /* Keeps table header visible when scrolling within the container */
+    top: 0; /* Sticks to the top of its scrolling container */
+    z-index: 1; /* Ensures header is above other table content */
+}
+
+/* Zebra striping for table rows */
+.data-display-container tr:nth-child(even) {
+    background-color: #f2f2f2; /* Light grey for even rows */
+}
+
+/* Hover effect for table rows */
+.data-display-container tr:hover {
+    background-color: #e2e2e2; /* Slightly darker grey on hover */
+}
+
+/* Specific styling for single object display (used by renderObjectDetails) */
+.object-details dt {
+    font-weight: bold;
+    margin-top: 5px;
+    color: #555;
+}
+.object-details dd {
+    margin-left: 20px; /* Indent definition descriptions */
+    margin-bottom: 5px;
+}
+
+/* Horizontal rule for section separation */
 hr {
     border: 0;
-    border-top: 1px dashed #ccc;
-    margin: 40px 0;
+    border-top: 1px dashed #ccc; /* Dashed line */
+    margin: 40px 0; /* Spacing above and below */
 }

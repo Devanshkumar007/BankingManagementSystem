@@ -36,12 +36,6 @@ public class SavingAccountServiceImpl implements SavingAccountService {
 		return true;
 	}
 
-	@Override
-	@Transactional
-	public SavingAccount updateSavingAccount(SavingAccount account) {
-		//TODO
-		return account;
-	}
 
 	@Override
 	public SavingAccount findById(int id) {

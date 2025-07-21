@@ -34,7 +34,7 @@ public class Account {
 	private Boolean status;
 	
 	@ManyToOne
-	@JoinColumn(name = "person_id") // Proper FK column
+	@JoinColumn(name = "person_id")
 	@JsonBackReference 
 	Person person;
 

@@ -14,7 +14,7 @@ import jakarta.transaction.Transactional;
 @Transactional
 public class BankingServiesImpl implements BankingService {
 
-    private final TransactionController transactionController;
+//    private final TransactionController transactionController;
 
 	@Autowired
 	TransactionRepository transRepo;
@@ -28,16 +28,15 @@ public class BankingServiesImpl implements BankingService {
 	@Autowired
 	TransactionService transService;
 
-    BankingServiesImpl(TransactionController transactionController) {
-        this.transactionController = transactionController;
-    }
+	@Autowired
+    TransactionController transactionController;
+    
 	
 	@Override
 	public Transaction withdrawMoney(int id,int amount) {
 		Account acc = accService.findById(id);
 		if(acc.getBalance()<amount) return null;
 		acc.setBalance(acc.getBalance()-amount);
-		accService.updateAccount(acc);
 		Transaction transaction = new Transaction(0,"withdraw from account",acc,amount);
 		transService.createTransaction(transaction);
 		transRepo.save(transaction);
@@ -60,10 +59,10 @@ public class BankingServiesImpl implements BankingService {
 	@Override
 	public boolean transferWithinAccounts(int sender , int receiver , int amount) {
 		System.out.println("request to transfer from " + sender + " to receiver " + receiver + " amount "+ amount);
-		Account senderacc = accRepo.findById(sender).orElse(null);
-		Account receiveracc = accRepo.findById(receiver).orElse(null);
+		Account senderacc = accService.findById(sender);
+		Account receiveracc = accService.findById(receiver);
 		
-//		if(senderacc==null || receiveracc==null) return false;
+		if(senderacc==null || receiveracc==null) return false;
 		if(senderacc.getBalance() < amount) return false;
 		
 		
