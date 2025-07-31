@@ -41,15 +41,6 @@ public class SavingAccountController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-//    @PutMapping // PUT /api/saving-accounts (requires 'updateSavingAccount' implementation)
-//    public ResponseEntity<SavingAccount> updateSavingAccount(@RequestBody SavingAccount savingAccount) {
-//        // **TODO: Implement updateSavingAccount in SavingAccountServiceImpl first**
-//        SavingAccount updatedAccount = savingAccountService.updateSavingAccount(savingAccount);
-//        if (updatedAccount != null) {
-//            return new ResponseEntity<>(updatedAccount, HttpStatus.OK);
-//        }
-//        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-//    }
 
     @GetMapping("/{id}/balance") // GET /api/saving-accounts/{id}/balance
     public ResponseEntity<Double> getSavingAccountBalance(@PathVariable int id) {

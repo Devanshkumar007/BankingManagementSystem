@@ -3,211 +3,642 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LOVELY BANK</title>
+    <title>LOVELY BANK - Modern Banking System</title>
     <link rel="stylesheet" href="style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
 <body>
-    <header>
-        <h1>LOVELY BANK</h1>
-    </header>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <i class="fas fa-university"></i>
+                <span>LOVELY BANK</span>
+            </div>
+            <div class="nav-menu" id="navMenu">
+                <a href="#dashboard" class="nav-link active" data-section="dashboard">
+                    <i class="fas fa-tachometer-alt"></i> Dashboard
+                </a>
+                <a href="#customers" class="nav-link" data-section="customers">
+                    <i class="fas fa-users"></i> Customers
+                </a>
+                <a href="#accounts" class="nav-link" data-section="accounts">
+                    <i class="fas fa-credit-card"></i> Accounts
+                </a>
+                <a href="#banking" class="nav-link" data-section="banking">
+                    <i class="fas fa-exchange-alt"></i> Banking
+                </a>
+                <a href="#reports" class="nav-link" data-section="reports">
+                    <i class="fas fa-chart-bar"></i> Reports
+                </a>
+            </div>
+            <div class="nav-toggle" id="navToggle">
+                <i class="fas fa-bars"></i>
+            </div>
+        </div>
+    </nav>
 
-    <main>
-        <section class="form-section">
-            <h2>Add New Person</h2>
-            <form id="addPersonForm">
-                <label for="personId">Person ID:</label>
-                <input type="number" id="personId" required><br>
-
-                <label for="personName">Name:</label>
-                <input type="text" id="personName" required><br>
-
-                <label for="personPhone">Phone No:</label>
-                <input type="text" id="personPhone" required><br>
-
-                <label for="personAddress">Address:</label>
-                <input type="text" id="personAddress" required><br>
-
-                <label for="personRole">Role (e.g., customer, employee):</label>
-                <input type="text" id="personRole" required><br>
-
-                <button type="submit">Add Person</button>
-            </form>
-            <p id="addPersonMessage" class="message"></p>
-        </section>
-
-        <hr>
-
-        <section class="form-section">
-            <h2>Update Person Details</h2>
-            <form id="updatePersonForm">
-                <label for="updatePersonId">Person ID:</label>
-                <input type="number" id="updatePersonId" required><br>
-
-                <label for="updatePersonName">New Name:</label>
-                <input type="text" id="updatePersonName" required><br>
-
-                <label for="updatePersonPhone">New Phone No:</label>
-                <input type="text" id="updatePersonPhone" required><br>
-
-                <label for="updatePersonAddress">New Address:</label>
-                <input type="text" id="updatePersonAddress" required><br>
-
-                <label for="updatePersonRole">New Role:</label>
-                <input type="text" id="updatePersonRole" required><br>
-
-                <button type="submit">Update Person</button>
-            </form>
-            <p id="updatePersonMessage" class="message"></p>
-        </section>
-
-        <hr>
-
-        <section class="form-section">
-            <h2>Delete Account from Person</h2>
-            <form id="deleteAccountFromPersonForm">
-                <label for="deleteAccPersonId">Person ID:</label>
-                <input type="number" id="deleteAccPersonId" required><br>
-
-                <label for="deleteAccountId">Account Number:</label>
-                <input type="number" id="deleteAccountId" required><br>
-
-                <button type="submit">Delete Account</button>
-            </form>
-            <p id="deleteAccountMessage" class="message"></p>
-        </section>
-
-        <hr>
-
-        <section class="form-section">
-            <h2>Create New Account</h2>
-            <form id="createAccountForm">
-                <div class="radio-group">
-                    <label>Account Type:</label><br>
-                    <input type="radio" id="radioSavingAccount" name="accountType" value="SavingAccount" onchange="toggleAccountFields()" required>
-                    <label for="radioSavingAccount">Saving Account</label><br>
-                    <input type="radio" id="radioCurrentAccount" name="accountType" value="CurrentAccount" onchange="toggleAccountFields()">
-                    <label for="radioCurrentAccount">Current Account</label><br>
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Dashboard Section -->
+        <section id="dashboard" class="section active">
+            <div class="container">
+                <div class="section-header">
+                    <h1>Dashboard</h1>
+                    <p>Welcome to your banking dashboard</p>
+                    <button class="btn btn-primary" onclick="refreshDashboard()">
+                        <i class="fas fa-sync-alt"></i> Refresh
+                    </button>
                 </div>
 
-                <label for="createAccountBalance">Initial Balance:</label>
-                <input type="number" id="createAccountBalance" value="0" step="0.01" required><br>
-                <p id="currentAccountMinBalanceMsg" class="message error" style="display: none;"></p>
+                <!-- Stats Cards -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3 id="totalCustomers">0</h3>
+                            <p>Total Customers</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-credit-card"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3 id="totalAccounts">0</h3>
+                            <p>Total Accounts</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-dollar-sign"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3 id="totalBalance">₹0</h3>
+                            <p>Total Balance</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3 id="totalTransactions">0</h3>
+                            <p>Transactions</p>
+                        </div>
+                    </div>
+                </div>
 
-                <label for="createAccountPersonId">Person ID (to link account):</label>
-                <input type="number" id="createAccountPersonId" required><br>
+                <!-- Quick Actions & Recent Transactions -->
+                <div class="dashboard-grid">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>Quick Actions</h3>
+                        </div>
+                        <div class="card-content">
+                            <div class="quick-actions">
+                                <button class="action-btn" onclick="showSection('customers')">
+                                    <i class="fas fa-user-plus"></i>
+                                    <span>Add Customer</span>
+                                </button>
+                                <button class="action-btn" onclick="showSection('accounts')">
+                                    <i class="fas fa-plus-circle"></i>
+                                    <span>Create Account</span>
+                                </button>
+                                <button class="action-btn" onclick="showSection('banking')">
+                                    <i class="fas fa-exchange-alt"></i>
+                                    <span>Banking</span>
+                                </button>
+                                <button class="action-btn" onclick="showSection('reports')">
+                                    <i class="fas fa-chart-bar"></i>
+                                    <span>View Reports</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
 
-                <button type="submit">Create Account</button>
-            </form>
-            <p id="createAccountMessage" class="message"></p>
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>Recent Transactions</h3>
+                        </div>
+                        <div class="card-content">
+                            <div id="recentTransactions" class="transaction-list">
+                                <p class="no-data">No recent transactions</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </section>
 
-        <hr>
+        <!-- Customers Section -->
+        <section id="customers" class="section">
+            <div class="container">
+                <div class="section-header">
+                    <h1>Customer Management</h1>
+                    <p>Manage your bank customers</p>
+                    <button class="btn btn-primary" onclick="openModal('addCustomerModal')">
+                        <i class="fas fa-plus"></i> Add Customer
+                    </button>
+                </div>
 
-        <section class="form-section">
-            <h2>Link Existing Account to Person</h2>
-            <form id="linkAccountForm">
-                <label for="linkPersonId">Person ID:</label>
-                <input type="number" id="linkPersonId" required><br>
+                <!-- Search -->
+                <div class="search-container">
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="customerSearch" placeholder="Search customers..." onkeyup="filterCustomers()">
+                    </div>
+                </div>
 
-                <label for="linkAccountId">Account Number:</label>
-                <input type="number" id="linkAccountId" required><br>
-
-                <button type="submit">Link Account</button>
-            </form>
-            <p id="linkAccountMessage" class="message"></p>
+                <!-- Customers Table -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Customers</h3>
+                    </div>
+                    <div class="card-content">
+                        <div class="table-container">
+                            <table id="customersTable">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Name</th>
+                                        <th>Phone</th>
+                                        <th>Address</th>
+                                        <th>Role</th>
+                                        <th>Accounts</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="customersTableBody">
+                                    <tr>
+                                        <td colspan="7" class="no-data">Loading customers...</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </section>
 
-        <hr>
+        <!-- Accounts Section -->
+        <section id="accounts" class="section">
+            <div class="container">
+                <div class="section-header">
+                    <h1>Account Management</h1>
+                    <p>Manage bank accounts</p>
+                    <div class="header-actions">
+                        <button class="btn btn-primary" onclick="openModal('createAccountModal')">
+                            <i class="fas fa-plus"></i> Create Account
+                        </button>
+                    </div>
+                </div>
 
-        <section class="form-section">
-            <h2>Withdraw Money</h2>
-            <form id="withdrawForm">
-                <label for="withdrawAccountId">Account ID:</label>
-                <input type="number" id="withdrawAccountId" required><br>
+                <!-- Search -->
+                <div class="search-container">
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="accountSearch" placeholder="Search accounts..." onkeyup="filterAccounts()">
+                    </div>
+                </div>
 
-                <label for="withdrawAmount">Amount:</label>
-                <input type="number" id="withdrawAmount" required><br>
-
-                <button type="submit">Withdraw</button>
-            </form>
-            <p id="withdrawMessage" class="message"></p>
+                <!-- Accounts Table -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Accounts</h3>
+                    </div>
+                    <div class="card-content">
+                        <div class="table-container">
+                            <table id="accountsTable">
+                                <thead>
+                                    <tr>
+                                        <th>Account No</th>
+                                        <th>Type</th>
+                                        <th>Balance</th>
+                                        <th>Customer</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="accountsTableBody">
+                                    <tr>
+                                        <td colspan="6" class="no-data">Loading accounts...</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </section>
 
-        <hr>
+        <!-- Banking Section -->
+        <section id="banking" class="section">
+            <div class="container">
+                <div class="section-header">
+                    <h1>Banking Operations</h1>
+                    <p>Perform deposits, withdrawals, and transfers</p>
+                </div>
 
-        <section class="form-section">
-            <h2>Deposit Money</h2>
-            <form id="depositForm">
-                <label for="depositAccountId">Account ID:</label>
-                <input type="number" id="depositAccountId" required><br>
+                <div class="banking-tabs">
+                    <div class="tab-buttons">
+                        <button class="tab-btn active" onclick="showBankingTab('withdraw')">
+                            <i class="fas fa-arrow-up"></i> Withdraw
+                        </button>
+                        <button class="tab-btn" onclick="showBankingTab('deposit')">
+                            <i class="fas fa-arrow-down"></i> Deposit
+                        </button>
+                        <button class="tab-btn" onclick="showBankingTab('transfer')">
+                            <i class="fas fa-exchange-alt"></i> Transfer
+                        </button>
+                    </div>
 
-                <label for="depositAmount">Amount:</label>
-                <input type="number" id="depositAmount" required><br>
+                    <!-- Withdraw Tab -->
+                    <div id="withdrawTab" class="tab-content active">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3><i class="fas fa-arrow-up text-red"></i> Withdraw Money</h3>
+                            </div>
+                            <div class="card-content">
+                                <form id="withdrawForm" onsubmit="handleWithdraw(event)">
+                                    <div class="form-group">
+                                        <label for="withdrawAccountId">Account ID</label>
+                                        <input type="number" id="withdrawAccountId" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="withdrawAmount">Amount</label>
+                                        <input type="number" id="withdrawAmount" step="0.01" required>
+                                    </div>
+                                    <button type="submit" class="btn btn-danger">
+                                        <i class="fas fa-arrow-up"></i> Withdraw Money
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
 
-                <button type="submit">Deposit</button>
-            </form>
-            <p id="depositMessage" class="message"></p>
+                    <!-- Deposit Tab -->
+                    <div id="depositTab" class="tab-content">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3><i class="fas fa-arrow-down text-green"></i> Deposit Money</h3>
+                            </div>
+                            <div class="card-content">
+                                <form id="depositForm" onsubmit="handleDeposit(event)">
+                                    <div class="form-group">
+                                        <label for="depositAccountId">Account ID</label>
+                                        <input type="number" id="depositAccountId" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="depositAmount">Amount</label>
+                                        <input type="number" id="depositAmount" step="0.01" required>
+                                    </div>
+                                    <button type="submit" class="btn btn-success">
+                                        <i class="fas fa-arrow-down"></i> Deposit Money
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Transfer Tab -->
+                    <div id="transferTab" class="tab-content">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3><i class="fas fa-exchange-alt text-blue"></i> Transfer Money</h3>
+                            </div>
+                            <div class="card-content">
+                                <form id="transferForm" onsubmit="handleTransfer(event)">
+                                    <div class="form-group">
+                                        <label for="senderAccountId">Sender Account ID</label>
+                                        <input type="number" id="senderAccountId" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="receiverAccountId">Receiver Account ID</label>
+                                        <input type="number" id="receiverAccountId" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="transferAmount">Amount</label>
+                                        <input type="number" id="transferAmount" step="0.01" required>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="fas fa-exchange-alt"></i> Transfer Money
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </section>
 
-        <hr>
+        <!-- Reports Section -->
+        <section id="reports" class="section">
+            <div class="container">
+                <div class="section-header">
+                    <h1>Reports & Data</h1>
+                    <p>View and search banking data</p>
+                </div>
 
-        <section class="form-section">
-            <h2>Transfer Money</h2>
-            <form id="transferForm">
-                <label for="transferSenderAccountId">Sender Account ID:</label>
-                <input type="number" id="transferSenderAccountId" required><br>
+                <div class="reports-tabs">
+                    <div class="tab-buttons">
+                        <button class="tab-btn active" onclick="showReportsTab('search')">
+                            <i class="fas fa-search"></i> Search
+                        </button>
+                        <button class="tab-btn" onclick="showReportsTab('allCustomers')">
+                            <i class="fas fa-users"></i> All Customers
+                        </button>
+                        <button class="tab-btn" onclick="showReportsTab('allAccounts')">
+                            <i class="fas fa-credit-card"></i> All Accounts
+                        </button>
+                        <button class="tab-btn" onclick="showReportsTab('allTransactions')">
+                            <i class="fas fa-chart-line"></i> All Transactions
+                        </button>
+                    </div>
 
-                <label for="transferReceiverAccountId">Receiver Account ID:</label>
-                <input type="number" id="transferReceiverAccountId" required><br>
+                    <!-- Search Tab -->
+                    <div id="searchTab" class="tab-content active">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3>Search Records</h3>
+                            </div>
+                            <div class="card-content">
+                                <div class="search-form">
+                                    <div class="form-group">
+                                        <label for="searchType">Search Type</label>
+                                        <select id="searchType">
+                                            <option value="person">Customer by ID</option>
+                                            <option value="account">Account by ID</option>
+                                            <option value="transactions">Transactions by Account ID</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="searchId">ID</label>
+                                        <input type="number" id="searchId" placeholder="Enter ID to search">
+                                    </div>
+                                    <button class="btn btn-primary" onclick="performSearch()">
+                                        <i class="fas fa-search"></i> Search
+                                    </button>
+                                </div>
+                                <div id="searchResults" class="search-results"></div>
+                            </div>
+                        </div>
+                    </div>
 
-                <label for="transferAmount">Amount:</label>
-                <input type="number" id="transferAmount" required><br>
+                    <!-- All Customers Tab -->
+                    <div id="allCustomersTab" class="tab-content">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3>All Customers</h3>
+                            </div>
+                            <div class="card-content">
+                                <div class="table-container">
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>Name</th>
+                                                <th>Phone</th>
+                                                <th>Address</th>
+                                                <th>Role</th>
+                                                <th>Accounts</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="allCustomersTableBody">
+                                            <tr>
+                                                <td colspan="6" class="no-data">Loading...</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
-                <button type="submit">Transfer</button>
-            </form>
-            <p id="transferMessage" class="message"></p>
-        </section>
+                    <!-- All Accounts Tab -->
+                    <div id="allAccountsTab" class="tab-content">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3>All Accounts</h3>
+                            </div>
+                            <div class="card-content">
+                                <div class="table-container">
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                                <th>Account No</th>
+                                                <th>Type</th>
+                                                <th>Balance</th>
+                                                <th>Customer</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="allAccountsTableBody">
+                                            <tr>
+                                                <td colspan="4" class="no-data">Loading...</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
-        <hr>
-
-        <section class="data-section">
-            <h2>Retrieve Data</h2>
-            <div>
-                <h3>Get Person by ID:</h3>
-                <input type="number" id="getPersonId" placeholder="Enter Person ID">
-                <button onclick="getPerson()">Get Person</button>
-                <div id="personDataContainer" class="data-display-container"></div>
-            </div>
-            <div>
-                <h3>Get Account by ID:</h3>
-                <input type="number" id="getAccountId" placeholder="Enter Account ID">
-                <button onclick="getAccount()">Get Account</button>
-                <div id="accountDataContainer" class="data-display-container"></div>
-            </div>
-             <div>
-                <h3>Get Transactions by Account ID:</h3>
-                <input type="number" id="getTransactionsAccountId" placeholder="Enter Account ID">
-                <button onclick="getTransactionsByAccount()">Get Transactions</button>
-                <div id="transactionsDataContainer" class="data-display-container"></div>
-            </div>
-
-            <hr>
-
-            <div>
-                <h3>Show All:</h3>
-                <button onclick="getAllPersons()">All Persons</button>
-                <div id="allPersonsDataContainer" class="data-display-container"></div>
-            </div>
-            <div>
-                <button onclick="getAllAccounts()">All Accounts</button>
-                <div id="allAccountsDataContainer" class="data-display-container"></div>
-            </div>
-            <div>
-                <button onclick="getAllTransactions()">All Transactions</button>
-                <div id="allTransactionsDataContainer" class="data-display-container"></div>
+                    <!-- All Transactions Tab -->
+                    <div id="allTransactionsTab" class="tab-content">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3>All Transactions</h3>
+                            </div>
+                            <div class="card-content">
+                                <div class="table-container">
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                                <th>Transaction ID</th>
+                                                <th>Type</th>
+                                                <th>Amount</th>
+                                                <th>Account</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="allTransactionsTableBody">
+                                            <tr>
+                                                <td colspan="4" class="no-data">Loading...</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </section>
     </main>
+
+    <!-- Modals -->
+    <!-- Add Customer Modal -->
+    <div id="addCustomerModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Add New Customer</h3>
+                <span class="close" onclick="closeModal('addCustomerModal')">&times;</span>
+            </div>
+            <div class="modal-body">
+                <form id="addCustomerForm" onsubmit="handleAddCustomer(event)">
+                    <div class="form-group">
+                        <label for="customerId">Customer ID</label>
+                        <input type="number" id="customerId" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="customerName">Full Name</label>
+                        <input type="text" id="customerName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="customerPhone">Phone Number</label>
+                        <input type="text" id="customerPhone" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="customerAddress">Address</label>
+                        <input type="text" id="customerAddress" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="customerRole">Role</label>
+                        <input type="text" id="customerRole" placeholder="e.g., customer, employee" required>
+                    </div>
+                    <div class="modal-actions">
+                        <button type="button" class="btn btn-secondary" onclick="closeModal('addCustomerModal')">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Add Customer</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Update Customer Modal -->
+    <div id="updateCustomerModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Update Customer</h3>
+                <span class="close" onclick="closeModal('updateCustomerModal')">&times;</span>
+            </div>
+            <div class="modal-body">
+                <form id="updateCustomerForm" onsubmit="handleUpdateCustomer(event)">
+                    <div class="form-group">
+                        <label for="updateCustomerId">Customer ID</label>
+                        <input type="number" id="updateCustomerId" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="updateCustomerName">Full Name</label>
+                        <input type="text" id="updateCustomerName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="updateCustomerPhone">Phone Number</label>
+                        <input type="text" id="updateCustomerPhone" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="updateCustomerAddress">Address</label>
+                        <input type="text" id="updateCustomerAddress" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="updateCustomerRole">Role</label>
+                        <input type="text" id="updateCustomerRole" required>
+                    </div>
+                    <div class="modal-actions">
+                        <button type="button" class="btn btn-secondary" onclick="closeModal('updateCustomerModal')">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Update Customer</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Customer Modal -->
+    <div id="deleteCustomerModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Delete Customer</h3>
+                <span class="close" onclick="closeModal('deleteCustomerModal')">&times;</span>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete this customer?</p>
+                <div id="deleteCustomerInfo" class="info-text"></div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('deleteCustomerModal')">Cancel</button>
+                    <button type="button" class="btn btn-danger" onclick="confirmDeleteCustomer()">Delete Customer</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Create Account Modal -->
+    <div id="createAccountModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Create New Account</h3>
+                <span class="close" onclick="closeModal('createAccountModal')">&times;</span>
+            </div>
+            <div class="modal-body">
+                <form id="createAccountForm" onsubmit="handleCreateAccount(event)">
+                    <div class="form-group">
+                        <label for="accountType">Account Type</label>
+                        <select id="accountType" required onchange="toggleAccountTypeInfo()">
+                            <option value="">Select account type</option>
+                            <option value="SavingAccount">Savings Account</option>
+                            <option value="CurrentAccount">Current Account</option>
+                        </select>
+                        <div id="currentAccountInfo" class="info-text" style="display: none;">
+                            Current account requires initial balance greater than ₹10,000
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="initialBalance">Initial Balance</label>
+                        <input type="number" id="initialBalance" step="0.01" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="accountPersonId">Customer ID</label>
+                        <input type="number" id="accountPersonId" required>
+                    </div>
+                    <div class="modal-actions">
+                        <button type="button" class="btn btn-secondary" onclick="closeModal('createAccountModal')">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Create Account</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Account Modal -->
+    <div id="deleteAccountModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Delete Account</h3>
+                <span class="close" onclick="closeModal('deleteAccountModal')">&times;</span>
+            </div>
+            <div class="modal-body">
+                <form id="deleteAccountForm" onsubmit="handleDeleteAccount(event)">
+                    <div class="form-group">
+                        <label for="deleteAccountId">Account Number</label>
+                        <input type="number" id="deleteAccountId" required>
+                    </div>
+                    <p class="info-text">Warning: This action cannot be undone. All account data will be permanently deleted.</p>
+                    <div class="modal-actions">
+                        <button type="button" class="btn btn-secondary" onclick="closeModal('deleteAccountModal')">Cancel</button>
+                        <button type="submit" class="btn btn-danger">Delete Account</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast">
+        <div class="toast-content">
+            <span id="toastMessage"></span>
+            <button class="toast-close" onclick="hideToast()">&times;</button>
+        </div>
+    </div>
 
     <script src="script.js"></script>
 </body>

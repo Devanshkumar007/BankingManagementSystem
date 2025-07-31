@@ -59,4 +59,14 @@ public class TransactionController {
         }
         return new ResponseEntity<>(HttpStatus.NO_CONTENT); // 204 No Content if list is empty
     }
+    
+    @GetMapping("/people/{id}")
+    public ResponseEntity<List<Transaction>> getTransactionByPersonId(@PathVariable int id){
+    	List<Transaction> transactions = transactionService.findByPersonId(id);
+    	if (!transactions.isEmpty()) {
+            return new ResponseEntity<>(transactions, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+    
 }

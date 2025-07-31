@@ -25,7 +25,7 @@ public class Person {
 	
 	
 	@OneToMany(mappedBy = "person", cascade = CascadeType.ALL, orphanRemoval = true)
-	@JsonManagedReference
+	@JsonManagedReference("person-accounts")
 	List<Account> accounts = new ArrayList<>();
 //	@OneToMany(mappedBy = "person")
 //	private List<Account> accounts = new ArrayList<>();

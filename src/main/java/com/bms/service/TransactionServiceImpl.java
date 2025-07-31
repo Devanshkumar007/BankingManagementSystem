@@ -43,5 +43,9 @@ public class TransactionServiceImpl implements TransactionService{
 		// TODO Auto-generated method stub
 		return transRepo.findAll();
 	}
+	@Override
+	public List<Transaction> findByPersonId(int id) {
+		return transRepo.findByPersonId(id);
+	}
 
 }

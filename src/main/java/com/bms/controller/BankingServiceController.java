@@ -1,8 +1,10 @@
 package com.bms.controller;
 
-import com.bms.model.Account;
 import com.bms.model.Transaction;
 import com.bms.service.BankingService;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,20 +15,20 @@ import org.springframework.web.bind.annotation.*;
 @CrossOrigin(origins = {"http://localhost:6969", "http://127.0.0.1:6969"}) // Allow your frontend origin
 public class BankingServiceController {
 
-    private final BankingService bankingService;
-
-    @Autowired
-    public BankingServiceController(BankingService bankingService) {
-        this.bankingService = bankingService;
-    }
+	private static final Logger log = LoggerFactory.getLogger(BankingServiceController.class);
+	
+	@Autowired
+    BankingService bankingService;
 
     /**
      * Endpoint for withdrawing money from an account.
      * POST /api/banking/withdraw
      * Request Body: { "accountId": 123, "amount": 500 }
      */
+	
     @PostMapping("/withdraw")
     public ResponseEntity<Transaction> withdrawMoney(@RequestBody WithdrawalDepositRequest request) {
+    	log.debug("withdraw money :" + request);
         Transaction transaction = bankingService.withdrawMoney(request.getAccountId(), request.getAmount());
         if (transaction != null) {
             return new ResponseEntity<>(transaction, HttpStatus.OK); // Or HttpStatus.CREATED if a new transaction is the primary result
@@ -39,6 +41,7 @@ public class BankingServiceController {
      * POST /api/banking/deposit
      * Request Body: { "accountId": 123, "amount": 1000 }
      */
+    
     @PostMapping("/deposit")
     public ResponseEntity<Transaction> depositMoney(@RequestBody WithdrawalDepositRequest request) {
         Transaction transaction = bankingService.depositMoney(request.getAccountId(), request.getAmount());
@@ -80,6 +83,11 @@ public class BankingServiceController {
         public void setAccountId(int accountId) { this.accountId = accountId; }
         public int getAmount() { return amount; }
         public void setAmount(int amount) { this.amount = amount; }
+		@Override
+		public String toString() {
+			return "Request [accountId=" + accountId + ", amount=" + amount + "]";
+		}
+        
     }
 
     static class TransferRequest {

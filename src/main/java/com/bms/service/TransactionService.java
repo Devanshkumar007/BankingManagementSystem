@@ -11,5 +11,5 @@ public interface TransactionService {
 	Transaction findById(int id);
 	List<Transaction> findByAccountNo(int id);	
 	List<Transaction> findAll();
-	
+	List<Transaction> findByPersonId(int id);
 }
