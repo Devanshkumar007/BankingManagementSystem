@@ -11,7 +11,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/transactions")
-@CrossOrigin(origins = {"http://localhost:6969", "http://127.0.0.1:6969"})
+@CrossOrigin(origins = {"http://localhost:6969", "http://127.0.0.1:6969","https://froth-run-58409450.figma.site"})
 public class TransactionController {
 
 	@Autowired
