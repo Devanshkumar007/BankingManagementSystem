@@ -1,5 +1,6 @@
 package com.bms.controller;
 
+import com.bms.dto.TransactionResponseDTO;
 import com.bms.model.Transaction;
 import com.bms.service.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/transactions")
@@ -52,10 +54,13 @@ public class TransactionController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND); // Or HttpStatus.NO_CONTENT if an empty list is expected
     }
     @GetMapping // <-- ADD THIS: GET /api/transactions to get all transactions
-    public ResponseEntity<List<Transaction>> getAllTransactions() {
+    public ResponseEntity<List<TransactionResponseDTO>> getAllTransactions() {
         List<Transaction> transactions = transactionService.findAll();
         if (!transactions.isEmpty()) {
-            return new ResponseEntity<>(transactions, HttpStatus.OK);
+            List<TransactionResponseDTO> dtos = transactions.stream()
+                .map(TransactionResponseDTO::new)
+                .collect(Collectors.toList());
+            return new ResponseEntity<>(dtos, HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.NO_CONTENT); // 204 No Content if list is empty
     }

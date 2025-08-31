@@ -702,7 +702,7 @@ tr:hover {
   display: grid;
   grid-template-columns: 1fr 1fr auto;
   gap: 20px;
-  align-items: end;
+  align-items: center;
 }
 
 /* Action Buttons in Tables */

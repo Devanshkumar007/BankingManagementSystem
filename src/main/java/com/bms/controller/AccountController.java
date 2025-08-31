@@ -1,9 +1,11 @@
 package com.bms.controller;
 
+import com.bms.dto.AccountResponseDTO;
 import com.bms.model.Account;
 import com.bms.service.AccountService;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -28,10 +30,11 @@ public class AccountController {
     }
 
     @GetMapping("/{id}") // GET /api/accounts/{id}
-    public ResponseEntity<Account> getAccountById(@PathVariable int id) {
+    public ResponseEntity<AccountResponseDTO> getAccountById(@PathVariable int id) {
         Account account = accountService.findById(id);
         if (account != null) {
-            return new ResponseEntity<>(account, HttpStatus.OK);
+            AccountResponseDTO dto = new AccountResponseDTO(account);
+            return new ResponseEntity<>(dto, HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
@@ -46,10 +49,13 @@ public class AccountController {
 
     
     @GetMapping
-    public ResponseEntity<List<Account>> getAllPersons(){
+    public ResponseEntity<List<AccountResponseDTO>> getAllPersons(){
     	List<Account> accounts = accountService.findall();
         if (!accounts.isEmpty()) {
-            return new ResponseEntity<>(accounts, HttpStatus.OK);
+            List<AccountResponseDTO> dtos = accounts.stream()
+                .map(AccountResponseDTO::new)
+                .collect(Collectors.toList());
+            return new ResponseEntity<>(dtos, HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.NO_CONTENT); // 204 No Content if list is empty
     }

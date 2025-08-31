@@ -127,15 +127,15 @@ function displayRecentTransactions() {
         <div class="transaction-item">
             <div class="transaction-info">
                 <div class="transaction-icon ${transaction.type}">
-                    <i class="fas fa-arrow-${transaction.type === "deposit" ? "down" : "up"}"></i>
+                    <i class="fas fa-arrow-${transaction.type.includes("deposit") || transaction.type.includes("credited")  ? "down" : "up"}"></i>
                 </div>
                 <div class="transaction-details">
                     <h4>${transaction.type.charAt(0).toUpperCase() + transaction.type.slice(1)}</h4>
-                    <p>ID: ${transaction.transactionId}</p>
+                    <p>ID: ${transaction.transactionId} | Account: ${transaction.accountNo}</p>
                 </div>
             </div>
-            <div class="transaction-amount ${transaction.type === "deposit" ? "positive" : "negative"}">
-                ${transaction.type === "deposit" ? "+" : "-"}${formatCurrency(transaction.amount)}
+            <div class="transaction-amount ${transaction.type.includes("deposit") || transaction.type.includes("credited") ? "positive" : "negative"}">
+                ${transaction.type.includes("deposit") || transaction.type.includes("credited") ? "+" : "-"}${formatCurrency(transaction.amount)}
             </div>
         </div>
     `,
@@ -382,7 +382,7 @@ function displayAccounts() {
             <td>${account.accountNo}</td>
             <td><span class="badge ${account.type === "saving acc" ? "badge-primary" : "badge-secondary"}">${account.type === "saving acc" ? "SAVINGS" : "CURRENT"}</span></td>
             <td>₹${formatCurrency(account.balance)}</td>
-            <td>${account.person ? `<i class="fas fa-user"></i> ${account.person.name}` : '<span style="color: #a0aec0;">Not linked</span>'}</td>
+            <td>${account.personName ? `<i class="fas fa-user"></i> ${account.personName}` : '<span style="color: #a0aec0;">Not linked</span>'}</td>
             <td><span class="badge ${account.balance > 0 ? "badge-success" : "badge-danger"}">${account.balance > 0 ? "ACTIVE" : "INACTIVE"}</span></td>
             <td>
                 <div class="action-buttons">
@@ -402,7 +402,7 @@ function filterAccounts() {
   const filteredAccounts = accounts.filter(
     (account) =>
       account.accountNo.toString().includes(searchTerm) ||
-      (account.person && account.person.name.toLowerCase().includes(searchTerm)) ||
+      (account.personName && account.personName.toLowerCase().includes(searchTerm)) ||
       account.type.toLowerCase().includes(searchTerm),
   )
 
@@ -414,7 +414,7 @@ function filterAccounts() {
             <td>${account.accountNo}</td>
             <td><span class="badge ${account.type === "saving acc" ? "badge-primary" : "badge-secondary"}">${account.type === "saving acc" ? "SAVINGS" : "CURRENT"}</span></td>
             <td>₹${formatCurrency(account.balance)}</td>
-            <td>${account.person ? `<i class="fas fa-user"></i> ${account.person.name}` : '<span style="color: #a0aec0;">Not linked</span>'}</td>
+            <td>${account.personName ? `<i class="fas fa-user"></i> ${account.personName}` : '<span style="color: #a0aec0;">Not linked</span>'}</td>
             <td><span class="badge ${account.balance > 0 ? "badge-success" : "badge-danger"}">${account.balance > 0 ? "ACTIVE" : "INACTIVE"}</span></td>
             <td>
                 <div class="action-buttons">
@@ -708,7 +708,7 @@ function loadAllAccountsReport() {
             <td>${account.accountNo}</td>
             <td><span class="badge ${account.type === "saving acc" ? "badge-primary" : "badge-secondary"}">${account.type === "saving acc" ? "Savings" : "Current"}</span></td>
             <td>${formatCurrency(account.balance)}</td>
-            <td>${account.person ? account.person.name : "Not linked"}</td>
+            <td>${account.personName ? account.personName : "Not linked"}</td>
         </tr>
     `,
     )
@@ -728,11 +728,11 @@ function loadAllTransactionsReport() {
       (transaction) => `
         <tr>
             <td>${transaction.transactionId}</td>
-            <td><span class="badge ${transaction.type === "deposit" ? "badge-success" : "badge-danger"}">${transaction.type}</span></td>
-            <td class="${transaction.type === "deposit" ? "text-green" : "text-red"}">
-                ${transaction.type === "deposit" ? "+" : "-"}${formatCurrency(transaction.amount)}
+            <td><span class="badge ${transaction.type.includes("deposit") || transaction.type.includes("credited") ? "badge-success" : "badge-danger"}">${transaction.type}</span></td>
+            <td class="${transaction.type.includes("deposit") || transaction.type.includes("credited") ? "text-green" : "text-red"}">
+                ${transaction.type.includes("deposit") || transaction.type.includes("credited") ? "+" : "-"}${formatCurrency(transaction.amount)}
             </td>
-            <td>${transaction.account ? transaction.account.accountNo : "N/A"}</td>
+            <td>${transaction.accountNo}</td>
         </tr>
     `,
     )
@@ -824,7 +824,7 @@ function displaySearchResults(data, searchType) {
                         <div><strong>Account No:</strong> ${data.accountNo}</div>
                         <div><strong>Type:</strong> <span class="badge badge-secondary">${data.type === "saving acc" ? "Savings" : "Current"}</span></div>
                         <div><strong>Balance:</strong> ${formatCurrency(data.balance)}</div>
-                        ${data.person ? `<div><strong>Customer:</strong> ${data.person.name} (ID: ${data.person.id})</div>` : "<div><strong>Customer:</strong> Not linked</div>"}
+                        ${data.personName ? `<div><strong>Customer:</strong> ${data.personName}</div>` : "<div><strong>Customer:</strong> Not linked</div>"}
                     </div>
                 </div>
             </div>
@@ -856,9 +856,9 @@ function displaySearchResults(data, searchType) {
                                     (transaction) => `
                                     <tr>
                                         <td>${transaction.transactionId}</td>
-                                        <td><span class="badge ${transaction.type === "deposit" ? "badge-success" : "badge-danger"}">${transaction.type}</span></td>
-                                        <td class="${transaction.type === "deposit" ? "text-green" : "text-red"}">
-                                            ${transaction.type === "deposit" ? "+" : "-"}${formatCurrency(transaction.amount)}
+                                        <td><span class="badge ${transaction.type.includes("deposit") || transaction.type.includes("credited") ? "badge-success" : "badge-danger"}">${transaction.type}</span></td>
+                                        <td class="${transaction.type.includes("deposit") || transaction.type.includes("credited") ? "text-green" : "text-red"}">
+                                            ${transaction.type.includes("deposit") || transaction.type.includes("credited") ? "+" : "-"}${formatCurrency(transaction.amount)}
                                         </td>
                                     </tr>
                                 `,
