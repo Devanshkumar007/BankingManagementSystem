@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/banking") // A common base path for banking operations
-@CrossOrigin(origins = {"http://localhost:6969", "http://127.0.0.1:6969","https://froth-run-58409450.figma.site"}) // Allow your frontend origin
+@CrossOrigin(origins = {"http://localhost:6969", "http://127.0.0.1:6969","https://devanshkumar007.github.io"}) // Allow your frontend origin
 public class BankingServiceController {
 
 	private static final Logger log = LoggerFactory.getLogger(BankingServiceController.class);

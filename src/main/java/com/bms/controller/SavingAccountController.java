@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/saving-accounts")
-@CrossOrigin(origins = {"http://localhost:6969", "http://127.0.0.1:6969","https://froth-run-58409450.figma.site"})
+@CrossOrigin(origins = {"http://localhost:6969", "http://127.0.0.1:6969","https://devanshkumar007.github.io"})
 public class SavingAccountController {
 
 	@Autowired
