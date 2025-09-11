@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/transactions")
-@CrossOrigin(origins = {"http://localhost:6969", "http://127.0.0.1:6969","https://devanshkumar007.github.io"})
+@CrossOrigin(origins = {"http://localhost:6969", "http://127.0.0.1:6969","https://devanshkumar007.github.io       "})
 public class TransactionController {
 
 	@Autowired

@@ -126,9 +126,9 @@ function displayRecentTransactions() {
       (transaction) => `
         <div class="transaction-item">
             <div class="transaction-info">
-                <div class="transaction-icon ${transaction.type}">
-                    <i class="fas fa-arrow-${transaction.type.includes("deposit") || transaction.type.includes("credited")  ? "down" : "up"}"></i>
-                </div>
+			<div class="transaction-icon ${transaction.type.includes("deposit") || transaction.type.includes("credited") ? "deposit" : "withdraw"}">
+			    <i class="fas fa-arrow-${transaction.type.includes("deposit") || transaction.type.includes("credited") ? "down" : "up"}"></i>
+			</div>
                 <div class="transaction-details">
                     <h4>${transaction.type.charAt(0).toUpperCase() + transaction.type.slice(1)}</h4>
                     <p>ID: ${transaction.transactionId} | Account: ${transaction.accountNo}</p>
